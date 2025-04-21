@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,64 +24,68 @@ import com.example.pupilmeshtask.presentation.screens.FaceDetectionScreenUI
 import com.example.pupilmeshtask.presentation.screens.HomeScreenUI
 import com.example.pupilmeshtask.presentation.screens.LoginScreenUI
 import com.example.pupilmeshtask.presentation.screens.MangaDetailsScreenUI
+import kotlinx.coroutines.flow.firstOrNull
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    var startDestination by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
-    val userPreferences = UserPreferenceManager
+    val userPref = remember { UserPreferenceManager(context) }
+    var startDestination by remember { mutableStateOf<String?>(null) }
 
 
-//    LaunchedEffect(Unit) {
-//        val isLoggedIn = userPreferences.
-//        startDestination =
-//            if (isLoggedIn) HomeScreenRoute::class.qualifiedName else LoginScreenRoute::class.qualifiedName
-//    }
+    LaunchedEffect(Unit) {
+        val email = userPref.userEmail.firstOrNull()
+        startDestination = (if (email != null) {
+            HomeScreenRoute::class.qualifiedName
+        } else {
+            LoginScreenRoute::class.qualifiedName
+        }).toString()
 
-//    if (startDestination == null) {
-//
-//        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//            CircularProgressIndicator()
-//        }
-//    } else {
-        val currentDestination by navController.currentBackStackEntryAsState()
-        val bottomBarScreens = listOf(
-            HomeScreenRoute::class.qualifiedName,
-            MangaDetailScreenRoute::class.qualifiedName,
-            FaceDetectionScreenRoute::class.qualifiedName,
 
-            )
-        val currentRoute = currentDestination?.destination?.route
-        val bottomBarVisibility = currentRoute in bottomBarScreens
+    }
 
-        Scaffold(
-            bottomBar = {
-                if (bottomBarVisibility) {
-                    BottomNavigationBar(navController)
-                }
-            }
+    if (startDestination == null) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            Box(modifier = Modifier.padding(it)) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    val bottomBarScreens = listOf(
+        HomeScreenRoute::class.qualifiedName,
+        MangaDetailScreenRoute::class.qualifiedName,
+        FaceDetectionScreenRoute::class.qualifiedName,
+    )
+    val showBottomBar = currentRoute in bottomBarScreens
 
-                NavHost(navController = navController, startDestination = LoginScreenRoute) {
-                    composable<LoginScreenRoute> {
-                        LoginScreenUI(navController)
-                    }
-                    composable<HomeScreenRoute> {
-                        HomeScreenUI(navController)
-                    }
-                    composable<MangaDetailScreenRoute> {
-                        MangaDetailsScreenUI(navController)
-                    }
-                    composable<FaceDetectionScreenRoute> {
-                        FaceDetectionScreenUI(navController)
-                    }
-
+    Scaffold(
+        containerColor = Color.Black,
+        bottomBar = {
+            if (showBottomBar) {
+                BottomNavigationBar(navController)
+            }
+        }
+    ) {
+        Box(modifier = Modifier.padding(it)) {
+            NavHost(navController = navController, startDestination = startDestination!!) {
+                composable<LoginScreenRoute> {
+                    LoginScreenUI(navController)
+                }
+                composable<HomeScreenRoute> {
+                    HomeScreenUI(navController)
+                }
+                composable<MangaDetailScreenRoute> {
+                    MangaDetailsScreenUI(navController)
+                }
+                composable<FaceDetectionScreenRoute> {
+                    FaceDetectionScreenUI(navController)
                 }
             }
-
         }
-
+    }
 
 }

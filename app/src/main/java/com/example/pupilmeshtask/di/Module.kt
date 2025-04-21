@@ -1,13 +1,15 @@
 package com.example.pupilmeshtask.di
 
 import android.content.Context
-import androidx.room.Dao
 import androidx.room.Room
 import com.example.pupilmeshtask.UserPreferenceManager
-import com.example.pupilmeshtask.data_layer.AppDatabase
-import com.example.pupilmeshtask.data_layer.UserDao
+import com.example.pupilmeshtask.data_layer.api.ApiProvider.api
+import com.example.pupilmeshtask.data_layer.api.ApiService
+import com.example.pupilmeshtask.data_layer.room_db.AppDatabase
+import com.example.pupilmeshtask.data_layer.room_db.dao.UserDao
 import com.example.pupilmeshtask.doman_layer.Repo
 import com.example.pupilmeshtask.doman_layer.RepoImpl
+import com.example.pupilmeshtask.doman_layer.use_case.GetMangaListUseCase
 import com.example.pupilmeshtask.doman_layer.use_case.LoginUseCase
 import dagger.Module
 import dagger.Provides
@@ -49,9 +51,10 @@ object AppModule {
     @Singleton
     fun provideRepo(
         userDao: UserDao,
-        preferences: UserPreferenceManager
+        preferences: UserPreferenceManager,
+        api: ApiService
     ): Repo {
-        return RepoImpl(userDao, preferences)
+        return RepoImpl(userDao, preferences, api)
     }
 
 
@@ -59,4 +62,19 @@ object AppModule {
     fun provideLoginUseCase(repo: Repo): LoginUseCase {
         return LoginUseCase(repo)
     }
+    @Provides
+    fun provideMangaListUseCase(repo: Repo): GetMangaListUseCase {
+        return GetMangaListUseCase(repo)
+    }
+    @Provides
+    @Singleton
+    fun provideContext(@ApplicationContext context: Context): Context {
+        return context
+    }
+    @Provides
+    @Singleton
+    fun provideApiService(): ApiService {
+        return api()
+    }
+
 }

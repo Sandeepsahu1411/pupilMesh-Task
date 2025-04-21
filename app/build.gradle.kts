@@ -2,10 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-//    id("com.google.devtools.ksp")
     kotlin("plugin.serialization") version "2.0.21"
+    id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
-    id("kotlin-kapt")
 
 }
 
@@ -43,9 +42,9 @@ android {
         compose = true
     }
 
-    kapt {
-        correctErrorTypes = true
-    }
+//    kapt {
+//        correctErrorTypes = true
+//    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -85,14 +84,19 @@ dependencies {
     //Room DB
     val room_version = "2.7.0"
     implementation("androidx.room:room-runtime:$room_version")
-    kapt ("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
     //preferences
     implementation("androidx.datastore:datastore-preferences:1.1.4")
 
     //DI
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation("com.google.dagger:hilt-android:2.56.1")
+    ksp("com.google.dagger:hilt-android-compiler:2.56.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    //Icons
+    implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
+
+
 }

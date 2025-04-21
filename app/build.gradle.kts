@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -97,6 +99,9 @@ dependencies {
 
     //Icons
     implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
+
+    implementation ("androidx.paging:paging-runtime:3.3.6")
+
 
 
 }

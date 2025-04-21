@@ -1,6 +1,6 @@
 package com.example.pupilmeshtask.data_layer.api.response
 
-import com.example.pupilmeshtask.data_layer.room_db.entity.Manga
+
 
 data class MangaData(
     val authors: List<String>,
@@ -17,12 +17,3 @@ data class MangaData(
     val type: String,
     val update_at: Long
 )
-fun MangaData.toManga(): Manga {
-    return Manga(
-        id = this.id,
-        title = this.title,
-        thumb = this.thumb,
-        type = this.type,
-        summary = this.summary
-    )
-}

@@ -12,3 +12,4 @@ data class MangaEntity(
     val summary: String,
     val type: String
 )
+

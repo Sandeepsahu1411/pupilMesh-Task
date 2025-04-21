@@ -88,6 +88,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+    implementation("androidx.room:room-paging:2.7.0")
 
     //preferences
     implementation("androidx.datastore:datastore-preferences:1.1.4")
@@ -101,6 +102,8 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
 
     implementation ("androidx.paging:paging-runtime:3.3.6")
+    implementation("androidx.paging:paging-compose:3.3.6")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
 
 
 

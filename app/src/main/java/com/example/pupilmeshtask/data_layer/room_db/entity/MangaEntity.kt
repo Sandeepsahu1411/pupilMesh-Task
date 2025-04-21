@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "manga_table")
 data class MangaEntity(
-    @PrimaryKey val id: String, // Use id instead of endpoint
+    @PrimaryKey val id: String,
     val title: String,
     val thumb: String,
     val summary: String,

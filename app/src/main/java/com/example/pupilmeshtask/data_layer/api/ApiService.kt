@@ -19,6 +19,11 @@ interface ApiService {
         @Header("X-RapidAPI-Host") apiHost: String = HOST
     ): Response<MangaResponse>
 
+    @GET("manga")
+    suspend fun getManga(
+        @Query("page") page: Int,
+        @Query("genres") genres: String = "Harem,Fantasy"
+    ): com.example.pupilmeshtask.data_layer.room_db.dto.MangaResponse
 
 }
 

@@ -20,13 +20,5 @@ interface ApiService {
     ): Response<MangaResponse>
 
 
-    @GET("manga/fetch")
-    suspend fun getManga(
-        @Query("page") page: Int,
-        @Query("genres") genres: String = "Harem,Fantasy",
-        @Query("nsfw") nsfw: Boolean = true,
-        @Query("type") type: String = "all"
-    ): MangaResponse
-
 }
 

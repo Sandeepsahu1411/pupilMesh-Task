@@ -1,5 +1,6 @@
 package com.example.pupilmeshtask.presentation
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -28,6 +29,7 @@ class MangaRemoteMediator(
             }
         }
 
+
         return try {
             val response = api.getManga(page = page)
             val mangaList = response.data.map { it.toEntity() }
@@ -36,10 +38,13 @@ class MangaRemoteMediator(
                 if (loadType == LoadType.REFRESH) db.mangaDao().clearAll()
                 db.mangaDao().insertAll(mangaList)
             }
+            Log.d("RemoteMediator", "Thumb saved: ${mangaList.firstOrNull()?.title}")
+
 
             MediatorResult.Success(endOfPaginationReached = mangaList.isEmpty())
         } catch (e: Exception) {
             MediatorResult.Error(e)
         }
     }
+
 }

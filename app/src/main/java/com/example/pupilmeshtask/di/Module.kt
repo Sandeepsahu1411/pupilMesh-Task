@@ -10,7 +10,7 @@ import com.example.pupilmeshtask.data_layer.room_db.dao.UserDao
 import com.example.pupilmeshtask.doman_layer.MangaRepository
 import com.example.pupilmeshtask.doman_layer.Repo
 import com.example.pupilmeshtask.doman_layer.RepoImpl
-import com.example.pupilmeshtask.doman_layer.use_case.GetMangaListUseCase
+
 import com.example.pupilmeshtask.doman_layer.use_case.LoginUseCase
 import com.example.pupilmeshtask.presentation.MangaRemoteMediator
 import dagger.Module
@@ -64,10 +64,7 @@ object AppModule {
     fun provideLoginUseCase(repo: Repo): LoginUseCase {
         return LoginUseCase(repo)
     }
-    @Provides
-    fun provideMangaListUseCase(repo: Repo): GetMangaListUseCase {
-        return GetMangaListUseCase(repo)
-    }
+
     @Provides
     @Singleton
     fun provideContext(@ApplicationContext context: Context): Context {

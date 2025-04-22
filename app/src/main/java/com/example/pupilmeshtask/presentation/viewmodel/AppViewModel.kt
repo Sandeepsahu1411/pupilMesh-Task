@@ -25,11 +25,5 @@ class AppViewModel @Inject constructor(
         }
     }
 
-    fun checkLoggedInUser(onLoggedIn: (String) -> Unit) {
-        viewModelScope.launch {
-            loginUseCase.loggedInUserEmail.collect { email ->
-                email?.let { onLoggedIn(it) }
-            }
-        }
-    }
+
 }

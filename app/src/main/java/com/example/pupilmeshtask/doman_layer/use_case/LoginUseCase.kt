@@ -18,5 +18,5 @@ class LoginUseCase @Inject constructor(private val repository: Repo) {
             true
         } else false
     }
-    val loggedInUserEmail: Flow<String?> = repository.loggedInUserEmail
+
 }

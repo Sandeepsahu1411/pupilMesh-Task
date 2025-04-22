@@ -19,7 +19,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.pupilmeshtask.UserPreferenceManager
+import com.example.pupilmeshtask.presentation.components.CameraPermission
 import com.example.pupilmeshtask.presentation.screens.FaceDetectionScreenUI
 import com.example.pupilmeshtask.presentation.screens.HomeScreenUI
 import com.example.pupilmeshtask.presentation.screens.LoginScreenUI
@@ -63,7 +65,6 @@ fun AppNavigation() {
     val showBottomBar = currentRoute in bottomBarScreens
 
     Scaffold(
-        containerColor = Color.Black,
         bottomBar = {
             if (showBottomBar) {
                 BottomNavigationBar(navController)
@@ -79,10 +80,17 @@ fun AppNavigation() {
                     HomeScreenUI(navController)
                 }
                 composable<MangaDetailScreenRoute> {
-                    MangaDetailsScreenUI(navController)
+                    val data = it.arguments?.getString("id")
+
+                    MangaDetailsScreenUI(navController, id = data.toString())
                 }
                 composable<FaceDetectionScreenRoute> {
-                    FaceDetectionScreenUI(navController)
+                    CameraPermission{
+                    FaceDetectionScreenUI()
+
+                    }
+
+
                 }
             }
         }

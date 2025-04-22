@@ -9,7 +9,9 @@ object LoginScreenRoute
 object HomeScreenRoute
 
 @Serializable
-object MangaDetailScreenRoute
+data class MangaDetailScreenRoute(
+    val id: String = ""
+)
 
 @Serializable
 object FaceDetectionScreenRoute

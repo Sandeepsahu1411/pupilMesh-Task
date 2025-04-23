@@ -44,12 +44,14 @@ android {
         compose = true
     }
 
-//    kapt {
-//        correctErrorTypes = true
-//    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+
+        }
+        jniLibs {
+            useLegacyPackaging = true
         }
     }
 }
@@ -102,7 +104,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
 
     //paging
-    implementation ("androidx.paging:paging-runtime:3.3.6")
+    implementation("androidx.paging:paging-runtime:3.3.6")
     implementation("androidx.paging:paging-compose:3.3.6")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
 
@@ -122,6 +124,9 @@ dependencies {
     // If you want to additionally use the CameraX Extensions library
     implementation("androidx.camera:camera-extensions:${camerax_version}")
 
+    //mediaPipe
+//    implementation("com.google.mediapipe:solution-core:0.10.20")
+    implementation("com.google.mediapipe:tasks-vision:0.20230731")
 
 
 }

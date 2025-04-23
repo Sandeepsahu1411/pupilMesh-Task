@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -26,6 +27,7 @@ import com.example.pupilmeshtask.presentation.screens.FaceDetectionScreenUI
 import com.example.pupilmeshtask.presentation.screens.HomeScreenUI
 import com.example.pupilmeshtask.presentation.screens.LoginScreenUI
 import com.example.pupilmeshtask.presentation.screens.MangaDetailsScreenUI
+import com.example.pupilmeshtask.presentation.viewmodel.MangaViewModel
 import kotlinx.coroutines.flow.firstOrNull
 
 @Composable
@@ -34,7 +36,7 @@ fun AppNavigation() {
     val context = LocalContext.current
     val userPref = remember { UserPreferenceManager(context) }
     var startDestination by remember { mutableStateOf<String?>(null) }
-
+    val sharedViewModel: MangaViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
         val email = userPref.userEmail.firstOrNull()
@@ -77,7 +79,7 @@ fun AppNavigation() {
                     LoginScreenUI(navController)
                 }
                 composable<HomeScreenRoute> {
-                    HomeScreenUI(navController)
+                    HomeScreenUI(navController,sharedViewModel)
                 }
                 composable<MangaDetailScreenRoute> {
                     val data = it.arguments?.getString("id")

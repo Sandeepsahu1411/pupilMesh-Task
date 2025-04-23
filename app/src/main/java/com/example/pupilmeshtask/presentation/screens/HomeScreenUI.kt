@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -39,7 +40,7 @@ import com.example.pupilmeshtask.presentation.viewmodel.MangaViewModel
 @Composable
 fun HomeScreenUI(
     navController: NavController,
-    viewModel: MangaViewModel = hiltViewModel()
+    viewModel: MangaViewModel
 ) {
     val mangaItems = remember { viewModel.mangaList }.collectAsLazyPagingItems()
     if (mangaItems.itemCount == 0 && mangaItems.loadState.refresh is LoadState.Error) {
@@ -60,14 +61,17 @@ fun HomeScreenUI(
                             .clickable { navController.navigate(MangaDetailScreenRoute(id = it.id)) },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        val context = LocalContext.current
+                        val imageRequest = remember(it.thumb) {
+                            ImageRequest.Builder(context)
+                                .data(if (it.thumb.isNotEmpty()) it.thumb else R.drawable.no_image)
+                                .crossfade(true)
+                                .diskCachePolicy(CachePolicy.ENABLED)
+                                .memoryCachePolicy(CachePolicy.ENABLED)
+                                .build()
+                        }
                         SubcomposeAsyncImage(
-                            model =
-                                ImageRequest.Builder(LocalContext.current)
-                                    .data(if (it.thumb.isNotEmpty()) it.thumb else R.drawable.no_image)
-                                    .crossfade(true)
-                                    .diskCachePolicy(CachePolicy.ENABLED)
-                                    .memoryCachePolicy(CachePolicy.ENABLED)
-                                    .build(),
+                            model = imageRequest,
 
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
@@ -85,27 +89,34 @@ fun HomeScreenUI(
                 }
             }
 
-
-        }
-        mangaItems.apply {
-            when {
-                loadState.refresh is LoadState.Loading -> {
-                    LoadingBar()
-                }
-
-                loadState.refresh is LoadState.Error -> {
-                    val error = loadState.refresh as LoadState.Error
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Error: ${error.error.message}", color = Color.Red)
+            mangaItems.apply {
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        item {
+                            LoadingBar()
+                        }
                     }
-                }
 
-                loadState.append is LoadState.Loading -> {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+                    loadState.refresh is LoadState.Error -> {
+                        item{
+                            val error = loadState.refresh as LoadState.Error
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                Text("Error: ${error.error.message}", color = Color.Red)
+                            }
+
+                        }
+                    }
+
+                    loadState.append is LoadState.Loading -> {
+                        item {
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+                            }
+                        }
                     }
                 }
             }
+
         }
     }
 }

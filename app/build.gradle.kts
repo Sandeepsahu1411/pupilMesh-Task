@@ -22,6 +22,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+        }
     }
 
     buildTypes {
@@ -55,6 +58,12 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
 
+        }
+        jniLibs {
+            useLegacyPackaging = true
+        }
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
 
     }
@@ -129,8 +138,9 @@ dependencies {
     implementation("androidx.camera:camera-extensions:${camerax_version}")
 
     //mediaPipe
-//    implementation("com.google.mediapipe:solution-core:0.10.20")
+
     implementation("com.google.mediapipe:tasks-vision:0.20230731")
+
 
 
 }

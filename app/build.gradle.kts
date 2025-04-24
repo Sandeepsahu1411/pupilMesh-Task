@@ -22,14 +22,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        ndk {
-            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-        }
+//        ndk {
+//            abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+//        }
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources= true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -46,14 +47,7 @@ android {
     buildFeatures {
         compose = true
     }
-    packagingOptions {
-        pickFirst("**/libmediapipe_tasks_vision_jni.so")
-        pickFirst("**/libmediapipe_jni.so")
-    }
 
-    aaptOptions {
-        noCompress += "tflite"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -66,6 +60,14 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
 
+    }
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a")
+            isUniversalApk = false
+        }
     }
 }
 
@@ -126,17 +128,10 @@ dependencies {
     // The following line is optional, as the core library is included indirectly by camera-camera2
     implementation("androidx.camera:camera-core:${camerax_version}")
     implementation("androidx.camera:camera-camera2:${camerax_version}")
-    // If you want to additionally use the CameraX Lifecycle library
     implementation("androidx.camera:camera-lifecycle:${camerax_version}")
-    // If you want to additionally use the CameraX VideoCapture library
-    implementation("androidx.camera:camera-video:${camerax_version}")
-    // If you want to additionally use the CameraX View class
     implementation("androidx.camera:camera-view:${camerax_version}")
-    // If you want to additionally add CameraX ML Kit Vision Integration
-    implementation("androidx.camera:camera-mlkit-vision:${camerax_version}")
-    // If you want to additionally use the CameraX Extensions library
-    implementation("androidx.camera:camera-extensions:${camerax_version}")
 
+    implementation("androidx.camera:camera-mlkit-vision:${camerax_version}")
 
     implementation("com.google.mediapipe:tasks-vision:0.20230731")
 

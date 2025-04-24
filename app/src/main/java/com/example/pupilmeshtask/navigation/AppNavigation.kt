@@ -34,7 +34,7 @@ fun AppNavigation() {
     val context = LocalContext.current
     val userPref = remember { UserPreferenceManager(context) }
     var startDestination by remember { mutableStateOf<String?>(null) }
-    val viewModel : AppViewModel = hiltViewModel()
+    val viewModel: AppViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
         val email = userPref.userEmail.firstOrNull()
@@ -74,19 +74,19 @@ fun AppNavigation() {
         Box(modifier = Modifier.padding(it)) {
             NavHost(navController = navController, startDestination = startDestination!!) {
                 composable<LoginScreenRoute> {
-                    LoginScreenUI(navController,viewModel)
+                    LoginScreenUI(navController, viewModel)
                 }
                 composable<HomeScreenRoute> {
-                    HomeScreenUI(navController,viewModel)
+                    HomeScreenUI(navController, viewModel)
                 }
                 composable<MangaDetailScreenRoute> {
                     val data = it.arguments?.getString("id")
 
-                    MangaDetailsScreenUI(navController, id = data.toString(),viewModel)
+                    MangaDetailsScreenUI(navController, id = data.toString(), viewModel)
                 }
                 composable<FaceDetectionScreenRoute> {
-                    CameraPermission{
-                    FaceDetectionScreenUI()
+                    CameraPermission {
+                        FaceDetectionScreenUI()
 
                     }
 

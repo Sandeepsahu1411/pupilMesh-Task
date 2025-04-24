@@ -14,7 +14,7 @@ This project is a part of the **PupilMesh Task**, implementing Login, Manga Fetc
   <img src="assets/face_detection_screen_1.png" width="200"/>
   <img src="assets/face_detection_screen_2.png" width="200"/>
 
-  <video src="assets/pupilmesh_task.mp4" width="300" controls />
+
 </p>
 
 ---

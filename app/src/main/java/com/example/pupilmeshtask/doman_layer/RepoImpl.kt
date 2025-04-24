@@ -21,11 +21,11 @@ class RepoImpl @Inject constructor(
     private val db: AppDatabase
 
 ) : Repo {
-    override suspend fun getUser(email: String): UserEntity? = userDao.getUserByEmail(email)
-
     override suspend fun insertUser(user: UserEntity) {
         userDao.insertUser(user)
     }
+
+    override suspend fun getUser(email: String): UserEntity? = userDao.getUserByEmail(email)
 
     override suspend fun saveLoggedInUser(email: String) {
         preferences.saveUserEmail(email)

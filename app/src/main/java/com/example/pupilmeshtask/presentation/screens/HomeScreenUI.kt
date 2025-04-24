@@ -35,12 +35,12 @@ import coil.request.ImageRequest
 import com.example.pupilmeshtask.R
 import com.example.pupilmeshtask.navigation.MangaDetailScreenRoute
 import com.example.pupilmeshtask.presentation.components.LoadingBar
-import com.example.pupilmeshtask.presentation.viewmodel.MangaViewModel
+import com.example.pupilmeshtask.presentation.viewmodel.AppViewModel
 
 @Composable
 fun HomeScreenUI(
     navController: NavController,
-    viewModel: MangaViewModel
+    viewModel: AppViewModel
 ) {
     val mangaItems = remember { viewModel.mangaList }.collectAsLazyPagingItems()
     if (mangaItems.itemCount == 0 && mangaItems.loadState.refresh is LoadState.Error) {

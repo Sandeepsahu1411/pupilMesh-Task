@@ -69,7 +69,7 @@ import com.example.pupilmeshtask.presentation.viewmodel.AppViewModel
 
 
 @Composable
-fun LoginScreenUI(navController: NavController, viewModel: AppViewModel = hiltViewModel()) {
+fun LoginScreenUI(navController: NavController, viewModel: AppViewModel ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val context = LocalContext.current

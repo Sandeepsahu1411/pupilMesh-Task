@@ -2,6 +2,8 @@ package com.example.pupilmeshtask.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
+import com.example.pupilmeshtask.doman_layer.use_case.GetMangaListUseCase
 import com.example.pupilmeshtask.doman_layer.use_case.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AppViewModel @Inject constructor(
-
+    private val  mangaUseCase : GetMangaListUseCase,
     private val loginUseCase: LoginUseCase
 ) : ViewModel() {
 
@@ -24,6 +26,8 @@ class AppViewModel @Inject constructor(
             _loginResult.value = result
         }
     }
+
+    val mangaList = mangaUseCase().cachedIn(viewModelScope)
 
 
 }

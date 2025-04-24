@@ -37,13 +37,13 @@ import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.example.pupilmeshtask.R
 import com.example.pupilmeshtask.presentation.components.LoadingBar
-import com.example.pupilmeshtask.presentation.viewmodel.MangaViewModel
+import com.example.pupilmeshtask.presentation.viewmodel.AppViewModel
 
 @Composable
 fun MangaDetailsScreenUI(
     navController: NavController,
     id: String,
-    viewModel: MangaViewModel = hiltViewModel()
+    viewModel: AppViewModel
 ) {
 
     val state = viewModel.mangaList.collectAsLazyPagingItems()

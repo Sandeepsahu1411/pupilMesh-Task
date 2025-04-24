@@ -19,7 +19,7 @@ This project is a part of the **PupilMesh Task**, implementing Login, Manga Fetc
 
 ---
 ### 📱 Download APK
-👉 [Download Latest APK (arm64-v8a)](https://github.com/Sandeepsahu1411/pupilMesh-Task/raw/main/releases/app-arm64-v8a-debug.apk)
+👉 [Download Latest APK ]([https://github.com/Sandeepsahu1411/pupilMesh-Task/raw/main/releases/app-arm64-v8a-debug.apk](https://github.com/Sandeepsahu1411/pupilMesh-Task/releases/download/v1.0.0/pupilmesh.apk))
 
 
 ## 🧠 Features

@@ -14,18 +14,19 @@ object MediaPipeFaceDetector {
         onResult: (FaceDetectorResult, MPImage, Long) -> Unit
     ): FaceDetector {
         val baseOptions = BaseOptions.builder()
-            .setModelAssetPath("face_detector.task") // not tflite if using .aar
+            .setModelAssetPath("face_detection_short_range.tflite")
             .build()
 
         val options = FaceDetector.FaceDetectorOptions.builder()
             .setBaseOptions(baseOptions)
-            .setRunningMode(RunningMode.LIVE_STREAM)
-            .setResultListener() { result, image ->
-                onResult(result , image, System.currentTimeMillis()) // ✅ Only 2 params
-            }
+            .setRunningMode(RunningMode.IMAGE)
+//            .setResultListener() { result, image ->
+//                onResult(result , image, System.currentTimeMillis())
+//            }
             .build()
 
         return FaceDetector.createFromOptions(context, options)
     }
 }
+
 

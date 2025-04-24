@@ -2,12 +2,20 @@ package com.example.pupilmeshtask.presentation.screens
 
 import android.content.ContentValues
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.media.MediaMetadataRetriever
+import android.net.Uri
+import android.os.SystemClock
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -18,6 +26,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +44,13 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.pupilmeshtask.presentation.camra_x.MediaPipeFaceAnalyzer
 import com.example.pupilmeshtask.presentation.camra_x.MediaPipeFaceDetector
 import com.example.pupilmeshtask.presentation.camra_x.isInsideCenterBox
+import com.google.mediapipe.framework.image.BitmapImageBuilder
+import com.google.mediapipe.framework.image.MPImage
+import com.google.mediapipe.tasks.core.BaseOptions
+import com.google.mediapipe.tasks.core.Delegate
+import com.google.mediapipe.tasks.vision.core.RunningMode
+import com.google.mediapipe.tasks.vision.facedetector.FaceDetector
+import com.google.mediapipe.tasks.vision.facedetector.FaceDetectorResult
 import java.util.concurrent.Executor
 import javax.annotation.Nonnull
 
@@ -46,6 +63,7 @@ fun FaceDetectionScreenUI() {
     val lifecycle = LocalLifecycleOwner.current
     val previewView = remember { PreviewView(context) }
     val isInside = remember { mutableStateOf(false) }
+    val imageCapture = remember { ImageCapture.Builder().build() }
 
     val faceDetector = remember {
         MediaPipeFaceDetector.buildDetector(context) { result, image, _ ->
@@ -79,10 +97,10 @@ fun FaceDetectionScreenUI() {
 
         val selector = CameraSelector.DEFAULT_FRONT_CAMERA
         cameraProvider.unbindAll()
-        cameraProvider.bindToLifecycle(lifecycle, selector, preview, analysis)
+        cameraProvider.bindToLifecycle(lifecycle, selector, preview, analysis,imageCapture)
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
         AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
         Box(
             Modifier
@@ -94,44 +112,20 @@ fun FaceDetectionScreenUI() {
                     RoundedCornerShape(6.dp)
                 )
         )
+        Button(
+            onClick = { takePhoto(imageCapture, context) },
+            enabled = isInside.value,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (isInside.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
+
+            )
+        ) {
+            Text("Take Photo")
+        }
+
     }
 }
 
-
-//@Composable
-//fun FaceDetectionScreenUI() {
-//    val context = LocalContext.current
-//    val lifecycleOwner = LocalLifecycleOwner.current
-//    val lens = CameraSelector.LENS_FACING_FRONT
-//    val preview = Preview.Builder().build()
-//    val PreviewView: PreviewView = remember { PreviewView(context) }
-//
-//    val cameraSelector = CameraSelector.Builder().requireLensFacing(lens).build()
-//
-//    val imageCapture = remember { ImageCapture.Builder().build() }
-//
-//    LaunchedEffect(Unit) {
-//        val cameraProvider = context.getCameraProvider()
-//        cameraProvider.unbindAll()
-//        cameraProvider.bindToLifecycle(
-//            lifecycleOwner, cameraSelector, preview, imageCapture
-//        )
-//
-//        preview.surfaceProvider = PreviewView.surfaceProvider
-//    }
-//    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-//
-//        AndroidView(factory = {
-//            PreviewView
-//        }, modifier = Modifier.fillMaxSize())
-//
-//        Button(onClick = { takePhoto(imageCapture, context) }) {
-//            Text("Take Photo")
-//        }
-//
-//    }
-//
-//}
 
 private suspend fun Context.getCameraProvider(): ProcessCameraProvider = suspendCoroutine {
     ProcessCameraProvider.getInstance(this).also { cameraProvider ->
@@ -141,7 +135,7 @@ private suspend fun Context.getCameraProvider(): ProcessCameraProvider = suspend
     }
 }
 
-private fun takePhoto(imageCapture: ImageCapture, context: Context) {
+private fun takePhoto(imageCapture: ImageCapture, context: Context,) {
     val name = "camera-x${System.currentTimeMillis()}.jpg"
 
     val contentValue = ContentValues().apply {
@@ -170,4 +164,3 @@ private fun takePhoto(imageCapture: ImageCapture, context: Context) {
     )
 
 }
-

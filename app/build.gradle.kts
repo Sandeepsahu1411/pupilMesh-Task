@@ -137,7 +137,6 @@ dependencies {
     // If you want to additionally use the CameraX Extensions library
     implementation("androidx.camera:camera-extensions:${camerax_version}")
 
-    //mediaPipe
 
     implementation("com.google.mediapipe:tasks-vision:0.20230731")
 

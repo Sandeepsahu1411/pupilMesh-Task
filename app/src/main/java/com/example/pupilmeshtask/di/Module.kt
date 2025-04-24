@@ -2,17 +2,16 @@ package com.example.pupilmeshtask.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.pupilmeshtask.UserPreferenceManager
+import com.example.pupilmeshtask.data_layer.room_db.database.UserPreferenceManager
 import com.example.pupilmeshtask.data_layer.api.ApiProvider.api
 import com.example.pupilmeshtask.data_layer.api.ApiService
-import com.example.pupilmeshtask.data_layer.room_db.AppDatabase
+import com.example.pupilmeshtask.data_layer.room_db.database.AppDatabase
 import com.example.pupilmeshtask.data_layer.room_db.dao.UserDao
-import com.example.pupilmeshtask.doman_layer.MangaRepository
 import com.example.pupilmeshtask.doman_layer.Repo
 import com.example.pupilmeshtask.doman_layer.RepoImpl
 
 import com.example.pupilmeshtask.doman_layer.use_case.LoginUseCase
-import com.example.pupilmeshtask.presentation.MangaRemoteMediator
+import com.example.pupilmeshtask.presentation.components.MangaRemoteMediator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -54,9 +53,10 @@ object AppModule {
     fun provideRepo(
         userDao: UserDao,
         preferences: UserPreferenceManager,
-        api: ApiService
+        api: ApiService,
+        db: AppDatabase
     ): Repo {
-        return RepoImpl(userDao, preferences, api)
+        return RepoImpl(userDao, preferences, api, db)
     }
 
 
@@ -65,24 +65,26 @@ object AppModule {
         return LoginUseCase(repo)
     }
 
+
     @Provides
     @Singleton
     fun provideContext(@ApplicationContext context: Context): Context {
         return context
     }
+
     @Provides
     @Singleton
     fun provideApiService(): ApiService {
         return api()
     }
+
+
     @Provides
     @Singleton
-    fun provideMangaRepository(apiService: ApiService, appDatabase: AppDatabase): MangaRepository {
-        return MangaRepository(apiService, appDatabase)
-    }
-    @Provides
-    @Singleton
-    fun provideMangaRemoteMediator(apiService: ApiService, appDatabase: AppDatabase): MangaRemoteMediator {
+    fun provideMangaRemoteMediator(
+        apiService: ApiService,
+        appDatabase: AppDatabase
+    ): MangaRemoteMediator {
         return MangaRemoteMediator(apiService, appDatabase)
     }
 

@@ -81,10 +81,10 @@ fun LoginScreenUI(navController: NavController, viewModel: AppViewModel = hiltVi
             imageVector = Icons.Rounded.Close,
             contentDescription = null,
             tint = Color.White,
-            modifier =  Modifier.clickable {activity?.finish() }
+            modifier = Modifier.clickable { activity?.finish() }
         )
         Spacer(Modifier.width(15.dp))
-        Text(text= "Sign In", color = Color.LightGray)
+        Text(text = "Sign In", color = Color.LightGray)
     }
     Column(
         modifier = Modifier
@@ -183,17 +183,7 @@ fun LoginScreenUI(navController: NavController, viewModel: AppViewModel = hiltVi
                         .height(55.dp),
                     textStyle = TextStyle(fontSize = 16.sp, color = Color.LightGray),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = {
-                        if (email.isEmpty() || password.isEmpty()) {
-                            Toast.makeText(
-                                context,
-                                "All fields required",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            viewModel.login(email, password)
-                        }
-                    }),
+
                     visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         val icon =
@@ -222,15 +212,22 @@ fun LoginScreenUI(navController: NavController, viewModel: AppViewModel = hiltVi
                 Button(
                     colors = ButtonDefaults.buttonColors(Color.Gray),
                     onClick = {
+                        val emailPattern = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[a-z]{2,3}\$")
+
                         if (email.isEmpty() || password.isEmpty()) {
                             Toast.makeText(
                                 context,
                                 "All fields required",
                                 Toast.LENGTH_SHORT
                             ).show()
-                        } else {
-                            viewModel.login(email, password)
+                            return@Button
                         }
+                        if (!emailPattern.matches(email)) {
+                            Toast.makeText(context, "Invalid email", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
+                        viewModel.login(email, password)
+
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {

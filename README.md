@@ -14,9 +14,9 @@ This project is a part of the **PupilMesh Task**, implementing Login, Manga Fetc
   <img src="assets/face_detection_screen_1.png" width="200"/>
   <img src="assets/face_detection_screen_2.png" width="200"/>
 
-<img src="assets/pupilmesh_task.gif" width="200">
 </p>
-
+## 🎥 Video Demo
+<img src="assets/pupilmesh_task.gif" width="200">
 ---
 ### 📥 Download APK
 👉 [Download Latest APK](https://github.com/Sandeepsahu1411/pupilMesh-Task/releases/download/v1.0.0/pupilmesh.apk)
